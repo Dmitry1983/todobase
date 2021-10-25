@@ -1,0 +1,9 @@
+export const ADD_TODO = 'ADD_TODO';
+export const EDIT_TODO = 'EDIT_TODO';
+export const REMOVE_TODO = 'REMOVE_TODO';
+export const TOGGLE_TODO = 'TOGGLE_TODO';
+export const RESET_TODOS = 'RESET_TODOS';
+export const LOAD_TODOS = 'LOAD_TODOS';
+export const ERROR_TODOS = 'ERROR_TODOS';
+export const IS_COMPLITED = 'IS_COMPLITED';
+export const SIGN_IN_USER_TOKEN = 'SIGN_IN_USER_TOKEN';

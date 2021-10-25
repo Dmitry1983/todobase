@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "79936428287",
+    "project_id": "todobase-e07cd",
+    "storage_bucket": "todobase-e07cd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:79936428287:android:fa5f6a51ffb02ad3cf54ca",
+        "android_client_info": {
+          "package_name": "com.todobase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "79936428287-120vdjj5ck0utklncvvq1a49iu8bm46n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3Q3LfwwJvnpnJGdLyl_oqEke9J6Lo4aY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "79936428287-120vdjj5ck0utklncvvq1a49iu8bm46n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
