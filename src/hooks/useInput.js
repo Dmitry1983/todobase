@@ -1,12 +1,12 @@
 import {useState} from 'react';
 
-export function useInput(initialValue, title) {
+export function useInput(initialValue, placeholder) {
   const [value, setValue] = useState(initialValue);
 
   const onChangeText = item => {
     setValue(item);
   };
-  const placeholder = title;
+
   return {
     value,
     onChangeText,

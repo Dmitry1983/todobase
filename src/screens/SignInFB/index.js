@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {
   View,
   StyleSheet,
@@ -9,10 +9,8 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import {useInput} from '@hooks';
+import {useInput, useFirestore} from '@hooks';
 import {CLR_BLACK_02, CLR_GREY, CLR_BLUE} from '@constants';
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
 
 const styles = StyleSheet.create({
   container: {
@@ -49,137 +47,26 @@ const styles = StyleSheet.create({
     color: CLR_GREY,
     margin: 5,
   },
+  item: {flexDirection: 'row', height: 30},
 });
-const FOLDER = 'users';
-const USER_DOC = 'WTxN0mZl71OJB6d0AASb';
 
 export const SignInFB = () => {
-  // const {handlerUserToken} = useActions();
-  const [snapshotData, setSnapshotData] = useState([]);
-  const [error, setError] = useState(null);
-  const [uid, setUid] = useState(null);
-  const [loading, setLoading] = useState(true);
   const username = useInput('123@gmail.com', 'username');
   const password = useInput('123123', 'password');
 
-  const database = firestore().collection(FOLDER).doc(USER_DOC);
-
-  useEffect(() => {
-    setLoading(true);
-    if (uid !== null) {
-      // let increment = 1;
-      const listener = database
-        .collection(uid)
-        .get()
-        .then(snapshot => {
-          const data = snapshot.docs.map(doc => ({
-            id: doc.id,
-            //  num: increment++,
-            ...doc.data(),
-          }));
-          setSnapshotData(data);
-        })
-        .catch(err => console.log(err));
-      setLoading(false);
-      return () => listener;
-    }
-  }, [uid, database]);
-
-  const getSnapshort = async () => {
-    let increment = 1;
-    await database
-      .collection(uid)
-      .get()
-      .then(snapshot => {
-        const data = snapshot.docs.map(doc => ({
-          id: doc.id,
-          num: increment++,
-          ...doc.data(),
-        }));
-        console.log(data);
-        setSnapshotData(data);
-      });
-  };
-
-  const removeData = async id => {
-    await database
-      .collection(uid)
-      .doc(id)
-      .delete()
-      .then(() => console.log('Document deleted')) // Document deleted
-      .catch(e => console.log('Error deleting document', e));
-
-    //getSnapshort();
-  };
-
-  const toggleComplete = async (id, complete) => {
-    await database.collection(uid).doc(id).update({
-      complete: !complete,
-    });
-    // getSnapshort();
-  };
-
-  const getData = async () => {
-    if (uid == null) {
-      return;
-    }
-    const userDoc = database.collection(uid).get();
-    console.log('userDoc : ', userDoc.docs);
-  };
-
-  const setData = async () => {
-    if (uid == null) {
-      return;
-    }
-    await database.collection(uid).add({
-      title: 'Add from APP',
-      complete: false,
-      article: 'Hello APP',
-    });
-    // getSnapshort();
-  };
-
-  const signUp = async (email, pass) => {
-    auth()
-      .createUserWithEmailAndPassword(email, pass)
-      .then(() => {
-        setError('User account created & signed UP!');
-        console.log('User account created & signed UP!');
-      })
-      .catch(err => {
-        setError(err.code);
-        console.log(err);
-      });
-  };
-  const signIn = async (email, pass) => {
-    auth()
-      .signInWithEmailAndPassword(email, pass)
-      .then(userCredential => {
-        console.log('User account signed IN! : ', userCredential);
-        setUid(userCredential.user._auth._user.uid);
-        console.log('UID : ', userCredential.user._auth._user.uid);
-        setError('User account signed IN!');
-      })
-      .catch(err => {
-        setError(err.code);
-        console.log(err);
-      });
-  };
-
-  const signOut = async () => {
-    await auth()
-      .signOut()
-      .then(() => {
-        setUid(null);
-        setError('User signed out!');
-        console.log('User signed out!');
-        setSnapshotData([]);
-      })
-      .catch(err => {
-        setError(err.code);
-        console.log(err);
-      });
-  };
+  const {
+    error,
+    signIn,
+    signOut,
+    signUp,
+    dataShot,
+    setData,
+    getData,
+    toggleComplete,
+    removeData,
+    getSnapshort,
+    loading,
+  } = useFirestore();
 
   return (
     <View style={styles.container}>
@@ -242,12 +129,12 @@ export const SignInFB = () => {
       />
       {!loading ? (
         <FlatList
-          keyExtractor={snapshotData.id}
-          data={snapshotData}
+          keyExtractor={dataShot.id}
+          data={dataShot}
           renderItem={({item}) => {
             return (
               <TouchableOpacity
-                style={{flexDirection: 'row', height: 30}}
+                style={styles.item}
                 onLongPress={() => {
                   removeData(item.id);
                 }}
